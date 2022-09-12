@@ -10,3 +10,4 @@ panic-halt = "0.2.0"
 [dependencies.arduino-hal]
 git = "https://github.com/Rahix/avr-hal"
 rev = "4cbb163"
+features = ["arduino-uno"]
