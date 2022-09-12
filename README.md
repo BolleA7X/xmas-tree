@@ -52,9 +52,10 @@ In the project *Cargo.toml* file:
     ```
 2. Add the dependency for the AVR HAL at the end of the file:  
     ```
-    [dependencies.harduino-hal]
+    [dependencies.arduino-hal]
     git = "https://github.com/Rahix/avr-hal"
     rev = "4cbb163"
+    features = ["arduino-uno"]
     ```
 3. Remove the ```edition``` field from the top of the file
 
@@ -83,3 +84,28 @@ Run the command:
     rustup override set nightly-2021-01-07
 
 This will set the rust buildchain to a version which is compatible with the AVR toolchain.
+
+## COMPILING & FLASHING
+
+To compile the project run the command
+
+    cargo build
+
+for the debug version, or
+
+    cargo build --release
+
+for the release (optimized) version.
+
+This will create a *xmas-tree.elf* file inside the *target/avr-atmega328p/debug* folder.
+
+To flash the program to the Arduino:
+
+1. Connect the Arduino to the computer via the USB cable
+2. Find the device name with the command ```ls /dev``` (for example: */ttyACM0*)
+3. run the commands:
+    ```
+    cd target/avr-atmega328p/debug
+    
+    avrdude -p m328p -c arduino -P /dev/ttyACM0 -b 115200 -U flash:w:xmas-tree.elf
+    ```
