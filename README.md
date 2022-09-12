@@ -76,6 +76,7 @@ At the end run the following command to setup the project
     build-std = ["core"]
     ```
 4. Download the ```avr-atmega328p.json``` file from https://github.com/Rahix/avr-hal/tree/main/avr-specs inside the project root directory
+5. If not already present, at the end of the ```avr-atmega328p.json``` file add the field: ```"panic-strategy": "abort"```
 
 ### Rust buildchain version
  
@@ -97,7 +98,7 @@ for the debug version, or
 
 for the release (optimized) version.
 
-This will create a *xmas-tree.elf* file inside the *target/avr-atmega328p/debug* folder.
+This will create a *xmas-tree.elf* file inside the *target/avr-atmega328p/debug* or *target/avr-atmega328p/release* folder.
 
 To flash the program to the Arduino:
 
@@ -106,6 +107,8 @@ To flash the program to the Arduino:
 3. run the commands:
     ```
     cd target/avr-atmega328p/debug
+        or
+    cd target/avr-atmega328p/release
     
     avrdude -p m328p -c arduino -P /dev/ttyACM0 -b 115200 -U flash:w:xmas-tree.elf
     ```
