@@ -3,6 +3,8 @@
 
 use core::panic::PanicInfo;
 
+mod animations;
+
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     loop {}
@@ -19,7 +21,7 @@ fn main() -> ! {
     // Create list of leds
     // (downgrade() is necessary to make them be of the same type, for the array)
 
-    let mut leds = [
+    let mut led_pins = [
         pins.d0.into_output().downgrade(),
         pins.d1.into_output().downgrade(),
         pins.d2.into_output().downgrade(),
@@ -36,19 +38,19 @@ fn main() -> ! {
         pins.d13.into_output().downgrade()
     ];
 
-    // Create list of leds state
-    let mut leds_state = [false; 14];
+    // Declare and initialize the interface with the animation logic
+    let mut iface: animations::Interface = animations::init_animations();
 
     /* === LOOP === */
 
     loop {
         // Animation logic
-        leds_state[0] = !leds_state[0];
-        arduino_hal::delay_ms(500);
+        iface.leds_state[0] = !iface.leds_state[0];
+        arduino_hal::delay_ms(iface.wait_time_ms);
 
         // Change the LEDs state
-        for i in 0..leds.len() {
-            if leds_state[i] {leds[i].set_high()} else {leds[i].set_low()}
+        for i in 0..led_pins.len() {
+            if iface.leds_state[i] {led_pins[i].set_high()} else {led_pins[i].set_low()}
         }
     }
 }
