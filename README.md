@@ -45,7 +45,7 @@ AVR is the architecture that the Arduino Uno microcontroller is based on (*ATmeg
 
 In the project *Cargo.toml* file:
 
-1. Add the dependency for the panic handler under the ```[dependencies]``` section:
+1. Add the dependency for the panic handler under the *[dependencies]* section:
     ```
     [dependencies]
     panic-halt = "0.2.0"
@@ -57,7 +57,10 @@ In the project *Cargo.toml* file:
     rev = "4cbb163"
     features = ["arduino-uno"]
     ```
-3. Remove the ```edition``` field from the top of the file
+3. Change the *edition* field at the top of the file:
+   ```
+    edition = "2018"
+   ```
 
 At the end run the following command to setup the project
 
@@ -65,9 +68,9 @@ At the end run the following command to setup the project
 
 ### Target
 
-1. Create a folder called ```.cargo``` in the project root directory and ```cd``` into it
-2. Inside the new folder create a file called ```config.toml```
-3. Write the following lines in the ```config.toml``` file:
+1. Create a folder called *.cargo* in the project root directory
+2. Inside the new folder create a file called *config.toml*
+3. Write the following lines in the *config.toml* file:
     ```
     [build]
     target = "avr-atmega328p.json"
@@ -75,8 +78,11 @@ At the end run the following command to setup the project
     [unstable]
     build-std = ["core"]
     ```
-4. Download the ```avr-atmega328p.json``` file from https://github.com/Rahix/avr-hal/tree/main/avr-specs inside the project root directory
-5. If not already present, at the end of the ```avr-atmega328p.json``` file add the field: ```"panic-strategy": "abort"```
+4. Download the *avr-atmega328p.json* file from https://github.com/Rahix/avr-hal/tree/main/avr-specs inside the project root directory
+5. If not already present, at the end of the *avr-atmega328p.json* file add the field:
+    ```
+    "panic-strategy": "abort"
+    ```
 
 ### Rust buildchain version
  
@@ -103,12 +109,16 @@ This will create a *xmas-tree.elf* file inside the *target/avr-atmega328p/debug*
 To flash the program to the Arduino:
 
 1. Connect the Arduino to the computer via the USB cable
-2. Find the device name with the command ```ls /dev``` (for example: */ttyACM0*)
-3. run the commands:
+2. Find the device name with the command ```lsblk``` (example device name: */ttyACM0*)
+3. Run the commands:
     ```
     cd target/avr-atmega328p/debug
-        or
+    ```
+    or
+    ```
     cd target/avr-atmega328p/release
-    
+    ```
+    then
+    ```
     avrdude -p m328p -c arduino -P /dev/ttyACM0 -b 115200 -U flash:w:xmas-tree.elf
     ```
