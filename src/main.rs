@@ -21,7 +21,7 @@ fn main() -> ! {
     // Create list of leds
     // (downgrade() is necessary to make them be of the same type, for the array)
 
-    let mut led_pins = [
+    let mut digital_pins = [
         pins.d0.into_output().downgrade(),
         pins.d1.into_output().downgrade(),
         pins.d2.into_output().downgrade(),
@@ -53,9 +53,9 @@ fn main() -> ! {
             let led_state: bool = l.1;
 
             if led_state {
-                led_pins[led_pin].set_high()
+                digital_pins[led_pin].set_high()
             } else {
-                led_pins[led_pin].set_low()
+                digital_pins[led_pin].set_low()
             }
         }
 
