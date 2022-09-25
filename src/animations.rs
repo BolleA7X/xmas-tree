@@ -19,14 +19,14 @@ pub const EMPTY_INTERFACE: Interface = Interface {
 
 struct Animation {
     steps: [Interface; STEPS_N_MAX],
-    steps_n: usize,
-    repetitions: usize,
+    steps_n: u8,
+    repetitions: u8,
     step_index: usize
 }
 
 struct Sequence {
     animations: [Animation; ANIMATIONS_N],
-    repet_count: usize,
+    repet_count: u8,
     anim_index: usize
 }
 
@@ -104,7 +104,7 @@ pub fn exec_next_step(iface: &mut Interface) {
     *iface = curr_animation.steps[curr_animation.step_index];
 
     // Go to the next step of the animation. If it was the last step, increment the repetition count
-    curr_animation.step_index = (curr_animation.step_index + 1) % curr_animation.steps_n;
+    curr_animation.step_index = (curr_animation.step_index + 1) % (curr_animation.steps_n as usize);
     if curr_animation.step_index == 0 {
         unsafe { SEQUENCE.repet_count += 1; }
     }
