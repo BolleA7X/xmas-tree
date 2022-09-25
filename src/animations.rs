@@ -26,7 +26,7 @@ struct Animation {
 
 struct Sequence {
     animations: [Animation; ANIMATIONS_N],
-    repet_index: usize,
+    repet_count: usize,
     anim_index: usize
 }
 
@@ -89,7 +89,7 @@ const BOT_TOP: Animation = Animation {
 
 static mut SEQUENCE: Sequence = Sequence {
     animations: [LEFT_RIGHT, BOT_TOP],
-    repet_index: 0,
+    repet_count: 0,
     anim_index: 0
 };
 
@@ -106,12 +106,12 @@ pub fn exec_next_step(iface: &mut Interface) {
     // Go to the next step of the animation. If it was the last step, increment the repetition count
     curr_animation.step_index = (curr_animation.step_index + 1) % curr_animation.steps_n;
     if curr_animation.step_index == 0 {
-        unsafe { SEQUENCE.repet_index += 1; }
+        unsafe { SEQUENCE.repet_count += 1; }
     }
     // If it also was the last repetition, go to the next animation
     unsafe {
-        if SEQUENCE.repet_index == curr_animation.repetitions {
-            SEQUENCE.repet_index = 0;
+        if SEQUENCE.repet_count == curr_animation.repetitions {
+            SEQUENCE.repet_count = 0;
             SEQUENCE.anim_index = (SEQUENCE.anim_index + 1) % ANIMATIONS_N;
         }
     }
