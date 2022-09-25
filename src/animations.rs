@@ -1,19 +1,118 @@
 const LEDS_N: usize = 7;
+const STEPS_N_MAX: usize = 7;
+const ANIMATIONS_N: usize = 2;
 
+/* === LOW LEVEL INTERFACE === */
+
+#[derive(Copy, Clone)]
 pub struct Interface {
     pub leds_state: [(usize, bool); LEDS_N],
     pub wait_time_ms: u16
 }
 
-pub fn init_interface() -> Interface {
-    let iface = Interface { wait_time_ms: 0, leds_state: [
-        (2, false),
-        (3, false),
-        (4, false),
-        (5, false),
-        (6, false),
-        (7, false),
-        (8, false),
-    ] };
-    iface
+pub const EMPTY_INTERFACE: Interface = Interface {
+    leds_state: [(2, false), (3, false), (4, false), (5, false), (6, false), (7, false), (8, false)],
+    wait_time_ms: 0
+};
+
+/* === ANIMATIONS === */
+
+struct Animation {
+    steps: [Interface; STEPS_N_MAX],
+    steps_n: usize,
+    repetitions: usize,
+    step_index: usize
+}
+
+struct Sequence {
+    animations: [Animation; ANIMATIONS_N],
+    repet_index: usize,
+    anim_index: usize
+}
+
+const LEFT_RIGHT: Animation = Animation {
+    step_index: 0,
+    steps_n: 2,
+    repetitions: 10,
+    steps: [
+        Interface {
+            leds_state: [(2, true), (3, false), (4, true), (5, false), (6, true), (7, false), (8, true)],
+            wait_time_ms: 300
+        },
+        Interface {
+            leds_state: [(2, false), (3, true), (4, false), (5, true), (6, false), (7, true), (8, true)],
+            wait_time_ms: 300
+        },
+        EMPTY_INTERFACE,
+        EMPTY_INTERFACE,
+        EMPTY_INTERFACE,
+        EMPTY_INTERFACE,
+        EMPTY_INTERFACE,
+    ]
+};
+
+const BOT_TOP: Animation = Animation {
+    step_index: 0,
+    steps_n: 7,
+    repetitions: 5,
+    steps: [
+        Interface {
+            leds_state: [(2, true), (3, true), (4, false), (5, false), (6, false), (7, false), (8, false)],
+            wait_time_ms: 300
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, true), (5, true), (6, false), (7, false), (8, false)],
+            wait_time_ms: 300
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, false), (5, false), (6, true), (7, true), (8, false)],
+            wait_time_ms: 300
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, false), (5, false), (6, false), (7, false), (8, true)],
+            wait_time_ms: 300
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, false), (5, false), (6, true), (7, true), (8, false)],
+            wait_time_ms: 300
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, true), (5, true), (6, false), (7, false), (8, false)],
+            wait_time_ms: 300
+        },
+        Interface {
+            leds_state: [(2, true), (3, true), (4, false), (5, false), (6, false), (7, false), (8, false)],
+            wait_time_ms: 300
+        },
+    ]
+};
+
+static mut SEQUENCE: Sequence = Sequence {
+    animations: [LEFT_RIGHT, BOT_TOP],
+    repet_index: 0,
+    anim_index: 0
+};
+
+/* === ANIMATION LOGIC === */
+
+pub fn exec_next_step(iface: &mut Interface) {
+    // Access current animation info
+    let mut curr_animation: &mut Animation;
+    unsafe { curr_animation = &mut SEQUENCE.animations[SEQUENCE.anim_index]; }
+
+    // Return the current step to the low level logic
+    *iface = curr_animation.steps[curr_animation.step_index];
+
+    // Go to the next step of the animation. If it was the last step, increment the repetition count
+    curr_animation.step_index = (curr_animation.step_index + 1) % curr_animation.steps_n;
+    if curr_animation.step_index == 0 {
+        unsafe { SEQUENCE.repet_index += 1; }
+    }
+    // If it also was the last repetition, go to the next animation
+    unsafe {
+        if SEQUENCE.repet_index == curr_animation.repetitions {
+            SEQUENCE.repet_index = 0;
+            SEQUENCE.anim_index = (SEQUENCE.anim_index + 1) % ANIMATIONS_N;
+        }
+    }
 }

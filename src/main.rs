@@ -39,13 +39,13 @@ fn main() -> ! {
     ];
 
     // Declare and initialize the interface with the animation logic
-    let mut iface: animations::Interface = animations::init_interface();
+    let mut iface: animations::Interface = animations::EMPTY_INTERFACE;
 
     /* === LOOP === */
 
     loop {
         // Animation logic
-        // TODO
+        animations::exec_next_step(&mut iface);
 
         // Change the LEDs state
         for l in iface.leds_state.iter() {
