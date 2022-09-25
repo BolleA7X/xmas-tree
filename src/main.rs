@@ -35,22 +35,31 @@ fn main() -> ! {
         pins.d10.into_output().downgrade(),
         pins.d11.into_output().downgrade(),
         pins.d12.into_output().downgrade(),
-        pins.d13.into_output().downgrade()
+        pins.d13.into_output().downgrade(),
     ];
 
     // Declare and initialize the interface with the animation logic
-    let mut iface: animations::Interface = animations::init_animations();
+    let mut iface: animations::Interface = animations::init_interface();
 
     /* === LOOP === */
 
     loop {
         // Animation logic
-        iface.leds_state[0] = !iface.leds_state[0];
-        arduino_hal::delay_ms(iface.wait_time_ms);
+        // TODO
 
         // Change the LEDs state
-        for i in 0..led_pins.len() {
-            if iface.leds_state[i] {led_pins[i].set_high()} else {led_pins[i].set_low()}
+        for l in iface.leds_state.iter() {
+            let led_pin: usize = l.0;
+            let led_state: bool = l.1;
+
+            if led_state {
+                led_pins[led_pin].set_high()
+            } else {
+                led_pins[led_pin].set_low()
+            }
         }
+
+        // Sleep for the requested time
+        arduino_hal::delay_ms(iface.wait_time_ms);
     }
 }
