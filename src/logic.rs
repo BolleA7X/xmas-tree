@@ -1,6 +1,6 @@
 const LEDS_N: usize = 7;
 const STEPS_N_MAX: usize = 7;
-const ANIMATIONS_N: usize = 2;
+const ANIMATIONS_N: usize = 3;
 
 /* === LOW LEVEL INTERFACE === */
 
@@ -54,7 +54,7 @@ const LEFT_RIGHT: Animation = Animation {
 const BOT_TOP: Animation = Animation {
     step_index: 0,
     steps_n: 7,
-    repetitions: 5,
+    repetitions: 4,
     steps: [
         Interface {
             leds_state: [(2, true), (3, true), (4, false), (5, false), (6, false), (7, false), (8, false)],
@@ -87,13 +87,34 @@ const BOT_TOP: Animation = Animation {
     ]
 };
 
-static mut SEQUENCE: Sequence = Sequence {
-    animations: [LEFT_RIGHT, BOT_TOP],
-    repet_count: 0,
-    anim_index: 0
+const ALL: Animation = Animation {
+    step_index: 0,
+    steps_n: 2,
+    repetitions: 4,
+    steps: [
+        Interface {
+            leds_state: [(2, true), (3, true), (4, true), (5, true), (6, true), (7, true), (8, true)],
+            wait_time_ms: 1000
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, false), (5, false), (6, false), (7, false), (8, false)],
+            wait_time_ms: 1000
+        },
+        EMPTY_INTERFACE,
+        EMPTY_INTERFACE,
+        EMPTY_INTERFACE,
+        EMPTY_INTERFACE,
+        EMPTY_INTERFACE,
+    ]
 };
 
 /* === ANIMATION LOGIC === */
+
+static mut SEQUENCE: Sequence = Sequence {
+    animations: [LEFT_RIGHT, BOT_TOP, ALL],
+    repet_count: 0,
+    anim_index: 0
+};
 
 pub fn exec_next_step(iface: &mut Interface) {
     // Access current animation info
