@@ -1,7 +1,10 @@
 PORT = /dev/ttyACM0
 ELF = target/avr-atmega328p/release/xmas-tree.elf
 
-default:
+default: build
+
+.PHONY: build
+build:
 	cargo build --release
 
 .PHONY: flash
