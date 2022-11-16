@@ -3,7 +3,7 @@
 
 use core::panic::PanicInfo;
 
-mod animations;
+mod logic;
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
@@ -39,13 +39,13 @@ fn main() -> ! {
     ];
 
     // Declare and initialize the interface with the animation logic
-    let mut iface: animations::Interface = animations::EMPTY_INTERFACE;
+    let mut iface: logic::Interface = logic::EMPTY_INTERFACE;
 
     /* === LOOP === */
 
     loop {
         // Animation logic
-        animations::exec_next_step(&mut iface);
+        logic::exec_next_step(&mut iface);
 
         // Change the LEDs state
         for l in iface.leds_state.iter() {
