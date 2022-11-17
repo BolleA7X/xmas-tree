@@ -8,10 +8,11 @@ This project implements a Christmas tree using an Arduino Uno and LEDs.
 
 * x1 Arduino Uno
 * x1 breadboard
-* xN red LEDs
-* xN green LEDs
-* xM 220 Ohm resistors
-* xQ jumper wires male-to-male
+* x3 red LEDs
+* x3 green LEDs
+* x1 yellow LEDs
+* x7 220 Ohm resistors
+* x10 jumper wires male-to-male
 
 ### Software
 
