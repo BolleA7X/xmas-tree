@@ -1,6 +1,6 @@
 const LEDS_N: usize = 7;
 const STEPS_N_MAX: usize = 7;
-const ANIMATIONS_N: usize = 3;
+const ANIMATIONS_N: usize = 4;
 
 /* === LOW LEVEL INTERFACE === */
 
@@ -108,10 +108,46 @@ const ALL: Animation = Animation {
     ]
 };
 
+const CIRCLE: Animation = Animation {
+    step_index: 0,
+    steps_n: 7,
+    repetitions: 8,
+    steps: [
+        Interface {
+            leds_state: [(2, true), (3, false), (4, false), (5, false), (6, false), (7, false), (8, false)],
+            wait_time_ms: 100
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, true), (5, false), (6, false), (7, false), (8, false)],
+            wait_time_ms: 100
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, false), (5, false), (6, true), (7, false), (8, false)],
+            wait_time_ms: 100
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, false), (5, false), (6, false), (7, false), (8, true)],
+            wait_time_ms: 100
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, false), (5, false), (6, false), (7, true), (8, false)],
+            wait_time_ms: 100
+        },
+        Interface {
+            leds_state: [(2, false), (3, false), (4, false), (5, true), (6, false), (7, false), (8, false)],
+            wait_time_ms: 100
+        },
+        Interface {
+            leds_state: [(2, false), (3, true), (4, false), (5, false), (6, false), (7, false), (8, false)],
+            wait_time_ms: 100
+        },
+    ]
+};
+
 /* === ANIMATION LOGIC === */
 
 static mut SEQUENCE: Sequence = Sequence {
-    animations: [LEFT_RIGHT, BOT_TOP, ALL],
+    animations: [LEFT_RIGHT, BOT_TOP, ALL, CIRCLE],
     repet_count: 0,
     anim_index: 0
 };
