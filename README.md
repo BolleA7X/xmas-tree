@@ -16,6 +16,7 @@ This project implements a Christmas tree using an Arduino Uno and LEDs.
 
 ### Software
 
+* Debian-based Linux distro
 * rustc / cargo
 * gcc-avr
 * avrdude
@@ -110,8 +111,7 @@ This will create a *xmas-tree.elf* file inside the *target/avr-atmega328p/debug*
 To flash the program to the Arduino:
 
 1. Connect the Arduino to the computer via the USB cable
-2. Find the device name with the command ```lsblk``` (example device name: */ttyACM0*)
-3. Run the commands:
+2. Run the commands:
     ```
     cd target/avr-atmega328p/debug
     ```
@@ -123,3 +123,15 @@ To flash the program to the Arduino:
     ```
     avrdude -p m328p -c arduino -P /dev/ttyACM0 -b 115200 -U flash:w:xmas-tree.elf
     ```
+
+where */ttyACM0* is usually the device file associated to a connected Arduino.
+
+## WIRING
+
+The image below shows the circuit.
+
+<img src="img/picture.jpg" width="500">
+
+Every LED is controlled separately by a specific Arduino digital pin; digital pins number 2 through 8 were chosen.
+
+Every LED is connected to ground through a 220 Ohm resistor. One of the ground rails of the breadboard is connected to one of the Arduino GND pins, while the other rail is wired to the first one.
