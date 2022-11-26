@@ -3,7 +3,7 @@
 ## OVERVIEW
 
 The design choice was to separate as much as possible the high level logic (animations logic) from the low level logic (Arduino code for LEDs control), in order to implement the high level logic in a modular way. By doing so:
-* animations can be added, removed or changed without having side effects on other parts of the code.
+* animations can be added, removed or changed without having side effects on other parts of the code
 * the animations logic can be ported with little effort to other platforms and hardware
 
 ## BLOCK DIAGRAM
